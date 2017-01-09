@@ -82,7 +82,8 @@ class MatrixPlotCanvas(Frame):
 
     def draw(self,pic):
 
-        import Tkinter, ImageTk
+        import Tkinter
+        import PIL.ImageTk as ImageTk
 
         # Old band has no connection with new draw.
         if self.rubberband:

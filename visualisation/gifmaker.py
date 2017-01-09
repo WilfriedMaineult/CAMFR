@@ -1,6 +1,6 @@
 #
 # The Python Imaging Library
-# $Id: gifmaker.py,v 1.1 2002-11-26 16:08:31 pbienst Exp $
+# $Id: gifmaker.py,v 1.1 2002/11/26 16:08:31 pbienst Exp $
 #
 # convert sequence format to GIF animation
 #
@@ -39,10 +39,10 @@
 # write data directly to a socket.  Or something...
 #
 
-import Image, ImageChops
+from PIL import Image, ImageChops
 import string
 
-from GifImagePlugin import getheader, getdata
+from PIL.GifImagePlugin import getheader, getdata
 
 # --------------------------------------------------------------------
 # sequence iterator
@@ -76,7 +76,7 @@ def makedelta(fp, sequence):
         if not previous:
 
             # global header
-            for s in getheader(im) + getdata(im):
+            for s in getheader(im)[0] + getdata(im):
                 fp.write(s)
 
         else:

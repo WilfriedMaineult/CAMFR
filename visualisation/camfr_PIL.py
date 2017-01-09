@@ -11,6 +11,9 @@
 
 from camfr import *
 from numpy import *
+import numpy as ml
+import TkPlotCanvas
+from PIL import Image, ImageDraw, ImageTk, ImageFilter, ImageChops
 
 # Colormap codes.
 
@@ -98,9 +101,6 @@ def _create_window_and_draw(drawobject):
 ##############################################################################
 
 def scatter_plot(x, y):
-    
-    import TkPlotCanvas
-    
     v = []
     for i in range(len(x)):
         v.append([x[i],y[i]])
@@ -116,10 +116,6 @@ def scatter_plot(x, y):
 ##############################################################################
 
 def plot_vector(v):
-
-    import TkPlotCanvas
-    
-    pass
     try:
         is2d = v[0][0]
         _create_window_and_draw(TkPlotCanvas.PolyLine(v))
@@ -145,8 +141,6 @@ def plot_vector(v):
 
 def _create_scaled_matrix_plot(colormap, z, r_x=0, r_y=0,
                                min_area = 100000, scale =1):
-    import Image
-    
     def round(x):
         return int(math.floor(x+.5))
 
@@ -179,7 +173,6 @@ def _create_scaled_matrix_plot(colormap, z, r_x=0, r_y=0,
 
 def _create_scaled_arrow_plot(px, pz, r_x=0, r_y=0,
                               min_area = 100000, scale =1):
-    import Image, ImageDraw
     global ARROWSIZE
     
     # Determine width and height of a vector.
@@ -304,18 +297,16 @@ def _create_arrow(draw, p, dx, dy):
 def _create_matrix_plot(z_, r_x=0, r_y=0, colorcode=0,
                         min_area=100000, scale=1):
 
-    import numpy.oldnumeric.mlab as ml
-        
     # Scale z and find appropriate colormap.
 
     z = z_.copy()
     
-    zmax = ml.max(ml.max(z))
-    zmin = ml.min(ml.min(z))
+    zmax = ml.max(z)
+    zmin = ml.min(z)
 
     if (zmin < 0) and (0 < zmax) and (not colorcode):
         colormap = create_bipolar_colormap()
-        zmax = ml.max(asarray([-zmin, zmax]))
+        zmax = max(asarray([-zmin, zmax]))
         z += zmax
         z *= (len(colormap)-1)/(2*zmax)
     else:
@@ -345,11 +336,9 @@ def _create_matrix_plot(z_, r_x=0, r_y=0, colorcode=0,
 
 def _create_arrow_plot(px, pz, r_x=0, r_y=0,
                        min_area=100000, scale=1):
-    import numpy.oldnumeric.mlab as ml
-    
     # Scale pz & px
     
-    pmax    = max( ml.max(ml.max(abs(pz))), ml.max(ml.max(abs(px))))
+    pmax    = ml.max(ml.max(abs(pz)), ml.max(abs(px)))
     if (pmax == 0): cst     = 0
     else:           cst     = ARROWSIZE/pmax
     pz      = pz*cst 
@@ -370,7 +359,7 @@ def _create_arrow_plot(px, pz, r_x=0, r_y=0,
 
 def _output_pic(pic, filename=0):
 
-    import Tkinter, ImageTk, os, sys
+    import Tkinter, os, sys
     
     if filename:
         if '.' in filename:
@@ -411,10 +400,8 @@ def _output_pic(pic, filename=0):
 def _overlay_pictures(pic1, pic2, contour):
 
     if (contour):
-        import ImageFilter, ImageChops
         return ImageChops.multiply(pic2.filter(ImageFilter.CONTOUR), pic1)
     else:
-        import Image
         return Image.blend(pic2, pic1, 0.5)
 
 
@@ -454,8 +441,6 @@ def plot_arrow(px, pz, r_x=0, r_z=0, filename=0):
 ##############################################################################
 
 def _create_phasor_movie(z_, r_x=0, r_y=0, min_area=100000, scale=1, ln=0):
-    
-    import numpy.oldnumeric.mlab as ml
     
     # Make movie memory.
     
@@ -528,7 +513,8 @@ def _create_phasor_movie(z_, r_x=0, r_y=0, min_area=100000, scale=1, ln=0):
 
 def _output_movie(movie, filename):
 
-    import Tkinter, ImageTk, gifmaker, os, sys
+    import Tkinter, gifmaker, os, sys
+    from PIL import ImageTk
 
     frames = len(movie)
 
