@@ -15,7 +15,7 @@ from math import *
 from camfr import *
 from numpy import *
 
-import ImageFile, Image, ImageDraw
+from PIL import ImageFile, Image, ImageDraw
 
 ############################################################################
 #
