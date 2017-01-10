@@ -15,9 +15,9 @@ class camfr_build(build):
   def run(self):
 
     import os
-    
-    #os.system("cd docs; make")
-     
+
+    os.system("cd docs; make pdf")
+
     os.system("scons")
     os.system(strip_command)
 
@@ -35,7 +35,7 @@ class camfr_install_data(install_data):
     # Byte-compile Python files.
 
     scripts = []
-          
+
     for i in self.data_files:
       for j in i[1]:
         if j[-2:] == "py":
@@ -43,9 +43,9 @@ class camfr_install_data(install_data):
           i[1].append(j+'c')
 
     byte_compile(scripts)
-      
+
     # Change install dir to library dir.
-    
+
     install_cmd = self.get_finalized_command('install')
     self.install_dir = getattr(install_cmd, 'install_lib')
 
